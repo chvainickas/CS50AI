@@ -1,6 +1,5 @@
 import csv
 import sys
-
 from util import Node, StackFrontier, QueueFrontier
 
 # Maps names to a set of corresponding person_ids
@@ -18,7 +17,7 @@ def load_data(directory):
     Load data from CSV files into memory.
     """
     # Load people
-    with open(f"{directory}/people.csv", encoding="utf-8") as f:
+    with open(f"degrees/{directory}/people.csv", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             people[row["id"]] = {
@@ -32,7 +31,7 @@ def load_data(directory):
                 names[row["name"].lower()].add(row["id"])
 
     # Load movies
-    with open(f"{directory}/movies.csv", encoding="utf-8") as f:
+    with open(f"degrees/{directory}/movies.csv", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             movies[row["id"]] = {
@@ -42,7 +41,7 @@ def load_data(directory):
             }
 
     # Load stars
-    with open(f"{directory}/stars.csv", encoding="utf-8") as f:
+    with open(f"degrees/{directory}/stars.csv", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             try:
@@ -91,6 +90,53 @@ def shortest_path(source, target):
 
     If no possible path, returns None.
     """
+    if source == target:
+        return [
+            (None, source)
+        ]
+    else:
+        # Initialize frontier to just the starting position
+        start = Node(state=source, parent=None, action=None)
+        frontier = QueueFrontier()
+        frontier.add(start)
+
+        # Initialize an empty explored set
+        explored = set()
+
+        # Keep looping until solution found
+        while True:
+
+            # If nothing left in frontier, then no path
+            if frontier.empty():
+                raise Exception("no solution")
+
+            # Choose a node from the frontier
+            node = frontier.remove()
+
+            # If node is the goal, then we have a solution
+            if node.state == target:
+                actions = []
+                cells = []
+                while node.parent is not None:
+                    actions.append(node.action)
+                    cells.append(node.state)
+                    node = node.parent
+                actions.reverse()
+                cells.reverse()
+                solution = []
+                for i in range(len(actions)):
+                    solution.append((actions[i], cells[i]))
+                return solution
+
+            # Mark node as explored
+            explored.add(node.state)
+
+            # Add neighbors to frontier
+            for action, state in neighbors_for_person(node.state):
+                if not frontier.contains_state(state) and state not in explored:
+                    child = Node(state=state, parent=node, action=action)
+                    frontier.add(child)
+
 
     # TODO
     raise NotImplementedError
