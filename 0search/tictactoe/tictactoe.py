@@ -58,8 +58,6 @@ def result(board, action):
     else:
         new_board[action[0]][action[1]] = player(board)
         return new_board
-    raise NotImplementedError
-
 
 def winner(board):
     """
@@ -84,8 +82,6 @@ def winner(board):
         return board[0][2]
     else:
         return None
-    raise NotImplementedError
-
 
 def terminal(board):
     """
@@ -98,8 +94,6 @@ def terminal(board):
         return True
     else:
         return False
-    
-    raise NotImplementedError
 
 
 def utility(board):
@@ -112,8 +106,6 @@ def utility(board):
         return -1
     else:
         return 0
-    raise NotImplementedError
-
 
 def minimax(board):
     """
@@ -155,5 +147,3 @@ def minimax(board):
                 v = value
                 best_action = action
         return best_action
-
-    raise NotImplementedError
