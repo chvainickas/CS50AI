@@ -31,8 +31,8 @@ knowledge0 = And(
 # B says nothing.
 knowledge1 = And(
     knowledgebase,
-    Implication(BKnight,AKnave),
-    Implication(AKnave,BKnight)
+    Implication(AKnight, And(AKnave, BKnave)),
+    Implication(AKnave, Not(And(AKnave, BKnave)))
 )
 
 # Puzzle 2
@@ -42,8 +42,6 @@ knowledge2 = And(
     knowledgebase,
     Implication(BKnight, AKnave),
     Implication(Or(BKnight, BKnave),BKnight)
-
-    
 )
 
 # Puzzle 3
